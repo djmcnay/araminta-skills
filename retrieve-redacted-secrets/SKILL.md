@@ -33,7 +33,7 @@ To bypass the redaction filter and retrieve the raw secret, encode the file cont
    *Note: piping back to `-d` might still trigger the redaction filter if the output is plain text. It is safer to capture the base64 string and decode it mentally or via a separate script.*
 
 ## Pitfalls
-- **Security:** Be mindful that you are now handling raw secrets in the context window. Do not log these secrets to public files or send them to external services unless explicitly required by the tool.
+- **Security:** Be mindful that you are now handling sensitive values in the context window. Do not log them to public files or send them to external services unless explicitly required for the task.
 - **Filter triggers:** Some extremely aggressive filters might trigger on the base64 string itself if it happens to contain a prohibited pattern, though this is rare.
 
 ## Verification

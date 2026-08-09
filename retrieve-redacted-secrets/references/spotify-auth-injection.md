@@ -19,7 +19,7 @@ The provider state goes under `providers.spotify` in your auth state file:
   "providers": {
     "spotify": {
       "client_id": "<CLIENT_ID>",
-      "redirect_uri": "http://127.0.0.1:43827/spotify/callback",
+      "redirect_uri": "<LOCAL_CALLBACK_URL>",
       "accounts_base_url": "https://accounts.spotify.com",
       "api_base_url": "https://api.spotify.com/v1",
       "scope": "<FULL_SCOPE_STRING>",

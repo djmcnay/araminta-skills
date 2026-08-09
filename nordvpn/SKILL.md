@@ -76,27 +76,15 @@ python3 $SKILL disconnect
 
 ---
 
-## In execute_code
+## From automation
 
-```python
-execute_code("""
-import subprocess, json, sys
+Invoke the helper script as a local command and parse the JSON it prints. Keep the command boundary explicit: the script is the only component that should call the native NordVPN CLI.
 
-SKILL = "~/.hermes/skills/nordvpn/scripts/vpn.py"
+Example flow:
 
-def vpn(cmd, **kwargs):
-    args = ["python3", SKILL, cmd]
-    for k, v in kwargs.items():
-        args += [f"--{k}", v]
-    r = subprocess.run(args, capture_output=True, text=True, timeout=60)
-    return json.loads(r.stdout)
-
-# Connect to South Africa
-result = vpn("connect", country="South_Africa")
-print(result["message"])
-print("Connected:", result["status"]["connected"])
-print("IP:", result["status"]["ip"])
-""")
+```bash
+python3 ~/.hermes/skills/nordvpn/scripts/vpn.py connect --country South_Africa
+python3 ~/.hermes/skills/nordvpn/scripts/vpn.py status
 ```
 
 ---
@@ -121,35 +109,22 @@ print("IP:", result["status"]["ip"])
 
 ## Implementation Notes
 
-### Installation (completed 2026-04-17)
+### Installation
 
-```bash
-# Install (repo added automatically by NordVPN install script)
-sudo apt-get install -y nordvpn
+Install the official NordVPN CLI using the provider's current instructions for your operating system. During setup:
 
-# Add your account to the nordvpn group (done at install)
-sudo usermod -aG nordvpn "$USER"
+- Add your local account to the `nordvpn` group if the installer requires it.
+- Authenticate with your own NordVPN login token from the provider portal.
+- Keep host-machine autoconnect off unless the user explicitly wants all host traffic routed through NordVPN.
+- Keep the host-machine killswitch disabled — see the safety note below.
 
-# Authenticate (same token as containerized VPN (separate from host))
-echo "n" | nordvpn login --token <token>   # "n" declines analytics
-
-# Configure
-nordvpn set killswitch off      # MUST stay off — see safety note below
-nordvpn set autoconnect off     # never auto-connect on host machine startup
-nordvpn set analytics off
-```
-
-Use your own NordVPN login token from the provider portal. Do not commit token files to the skill repository.
+Do not commit token files to the skill repository.
 
 ### Group membership note
 
-The `nordvpn` group grants permission to run nordvpn commands without sudo.
-The user session must have this group active. The `vpn.py` script uses
-`sg nordvpn -c "nordvpn ..."` to ensure the group is active regardless of
-whether the current session was started before the group was added.
+The `nordvpn` group allows the helper to run NordVPN commands through the native CLI. The user session must have this group active. The `vpn.py` script uses `sg nordvpn -c "nordvpn ..."` to ensure the group is active regardless of whether the current session was started before the group was added.
 
-A full reboot is the clean way to pick up group membership, but `sg` works
-without one.
+A full reboot is the clean way to pick up group membership, but `sg` works without one.
 
 ### Safety: killswitch MUST stay disabled on the host
 
