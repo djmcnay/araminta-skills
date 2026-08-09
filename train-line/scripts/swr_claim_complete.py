@@ -16,14 +16,19 @@ Usage:
         [--submit]
 """
 
-import os, sys, asyncio, argparse, re
+import sys, asyncio, argparse, re, json
 from pathlib import Path
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 
 # ── Config ──
 DOMAIN = "https://delayrepay.southwesternrailway.com"
-CDP_URL = os.environ.get("SWR_CDP_URL", "http://localhost:9222")
+_config_path = Path(__file__).parent.parent / "config.json"
+CDP_URL = "http://localhost:9222"
+if _config_path.exists():
+    with open(_config_path) as _f:
+        _cfg = json.load(_f)
+    CDP_URL = _cfg.get("cdp_url", CDP_URL)
 
 # ── Helpers ──
 def log(msg): print(f"[SWR] {msg}", flush=True)
