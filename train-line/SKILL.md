@@ -104,6 +104,10 @@ Base URL: `https://www.southwesternrailway.com/-/media/files/plan-my-journey/tim
 - Trainline's timetable table is JS-generated, not in static HTML.
 - MyTrainPal only shows a few sample trains on the generic route page, not the full schedule.
 
+**Example known patterns (SWR routes):**
+- **Liphook to Waterloo:** Trains run hourly at xx:21 past. First train ~05:19, last ~23:21. Direct services from Portsmouth Harbour via Haslemere, Guildford, Woking. Journey time ~1h04-1h09m for fast services, up to 1h19m for stoppers. (SWR Timetable PTT17)
+- **Isleworth to Waterloo:** Route uses the Windsor/Feltham line (SWR Timetable PTT04). Two routing patterns alternate: via Hounslow (fast, ~34 min) and via Richmond (stopping, ~38-40 min). Mon-Fri peak (06:30-09:30): 10-15 min frequency. First train ~05:34, last ~23:53. Typical morning departures for 08:00-08:30 arrival: ~07:22 (arr 07:56, fast), ~07:32 (arr 08:12, fast), ~07:37 (arr 08:15, stopping), ~07:47 (arr 08:21, fast), ~07:52 (arr 08:30, stopping).
+
 ### When the user says "going home", "going to work", etc.
 
 1. Parse the alias from their message (using stations.json)

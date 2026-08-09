@@ -16,7 +16,7 @@ from playwright.async_api import async_playwright
 # ── CONFIG ── Adjust these for each claim ──
 EMAIL       = "[user-email]"
 PWD         = "YOUR_PASSWORD_HERE"
-TICKET_IMG  = "/home/[user]/.hermes/image_cache/img_f1a1e6dbc200.jpg"
+TICKET_IMG  = "<your-home>/image_cache/img_f1a1e6dbc200.jpg"
 CLAIM_DATE  = "21"          # day of month only (assumes current month/year)
 FROM        = "Haslemere"
 TO          = "London Waterloo"

@@ -332,7 +332,7 @@ When automating any Angular Material form:
 
 ## Key Environment Details
 
-- **Playwright**: from hermes-agent venv (`[python-path]`)
+- **Playwright**: from hermes-agent venv (`<your-python-path>`)
 - **Chromium**: headless, installed via `playwright install chromium`
 - **Node version**: 22.x
 - **OS**: Raspberry Pi OS, kernel 6.12.75+rpt-rpi-2712
