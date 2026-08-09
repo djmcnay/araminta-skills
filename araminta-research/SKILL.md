@@ -1,5 +1,5 @@
 ---
-name: research
+name: araminta-research
 description: Multi-agent research pipeline for product evaluation, academic literature review, and general web research. Spawns parallel subagents for data collection, runs analysis and hallucination verification, delivers structured reports.
 ownership: collab
 category: research
