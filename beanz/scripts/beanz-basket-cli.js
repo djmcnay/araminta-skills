@@ -22,6 +22,12 @@ const BEANZ_BASE = "https://www.beanz.com/en-gb";
 const CDP_URL = process.env.BEANZ_CDP_URL || "http://localhost:9222";
 const TIMEOUT_MS = 30_000;
 
+// Algolia credentials from env vars (see SKILL.md for discovery instructions)
+const ALGOLIA_APP_ID = process.env.BEANZ_ALGOLIA_APP_ID || "";
+const ALGOLIA_API_KEY = process.env.BEANZ_ALGOLIA_API_KEY || "";
+const ALGOLIA_INDEX = process.env.BEANZ_ALGOLIA_INDEX || "Beanz_UK";
+const ALGOLIA_URL = `https://${ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/${ALGOLIA_INDEX}/query`;
+
 function log(...args) { console.log("[beanz-basket]", ...args); }
 function die(msg) { console.error("[beanz-basket] FATAL:", msg); process.exit(1); }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -75,12 +81,12 @@ async function resolveProductUrl(browser, raw) {
   try {
     const res = await page.evaluate(async (q) => {
       const resp = await fetch(
-        "https://VBT275CJRZ-dsn.algolia.net/1/indexes/Beanz_UK/query",
+        ALGOLIA_URL,
         {
           method: "POST",
           headers: {
-            "X-Algolia-Application-Id": "VBT275CJRZ",
-            "X-Algolia-API-Key": "93a2a727bf6bfa039a385e9c922e3daf",
+            "X-Algolia-Application-Id": ALGOLIA_APP_ID,
+            "X-Algolia-API-Key": ALGOLIA_API_KEY,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ query: q, hitsPerPage: 5 }),

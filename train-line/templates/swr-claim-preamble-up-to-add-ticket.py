@@ -136,7 +136,7 @@ async def main():
         # ── PAUSE HERE ──
         # Angular Material ticket-type radio buttons (E-ticket/M-ticket, Paper, etc.)
         # DO NOT respond to ANY programmatic click pattern tested through May 2026.
-        # Open the Pi VNC browser (http://100.65.212.67:6080/vnc.html) if using headed,
+        # Open the VNC browser (http://<your-host>:6080/vnc.html) if using headed,
         # or run this script with headless=False and screenshot via vision model.
         # Click the E-ticket/M-ticket radio manually, then continue below.
         print("\n" + "=" * 60)

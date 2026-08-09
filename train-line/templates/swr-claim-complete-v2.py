@@ -30,7 +30,7 @@ from datetime import datetime
 try:
     from playwright.async_api import async_playwright
 except ImportError:
-    die("Playwright not installed. Run: uv pip install playwright && playwright install chromium")
+    die("Playwright not installed. Run: pip install playwright && playwright install chromium")
 
 # ── Config ──
 DOMAIN = "https://delayrepay.southwesternrailway.com"

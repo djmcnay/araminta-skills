@@ -32,21 +32,48 @@ extract_orders.py      — Parse order history from Gmail confirmation emails
 
 beanz.com embeds Algolia credentials in its page HTML. These are public application-level keys (not secrets), safe to use for read-only catalog queries.
 
+### Configuration
+
+Copy `config.example.json` to `config.json` and fill in the values:
+
+```bash
+cp config.example.json config.json
 ```
-App ID:    VBT275CJRZ
-API Key:   93a2a727bf6bfa039a385e9c922e3daf
-Index:     Beanz_UK
-Endpoint:  https://VBT275CJRZ-dsn.algolia.net/1/indexes/Beanz_UK/query
+
+Or set environment variables:
+
+```bash
+export BEANZ_ALGOLIA_APP_ID="<your-app-id>"
+export BEANZ_ALGOLIA_API_KEY="<your-api-key>"
+export BEANZ_ALGOLIA_INDEX="Beanz_UK"
+```
+
+### Discovery
+
+To discover Algolia credentials for beanz.com (or any Algolia-backed retailer):
+
+```bash
+python3 price-spy/scripts/algolia-retail-query.py discover "https://www.beanz.com/en-gb/coffee"
+```
+
+### Endpoint
+
+```
+https://{APP_ID}-dsn.algolia.net/1/indexes/{INDEX}/query
 ```
 
 ### Catalog query (beanz-query.py)
 
 ```python
 import json, urllib.request
+from pathlib import Path
 
-ALGOLIA_APP_ID = "VBT275CJRZ"
-ALGOLIA_API_KEY = "93a2a727bf6bfa039a385e9c922e3daf"
-ALGOLIA_URL = f"https://{ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/Beanz_UK/query"
+# Load credentials from config.json
+config_path = Path(__file__).parent / "config.json"
+with open(config_path) as f:
+    cfg = json.load(f)
+
+ALGOLIA_URL = f"https://{cfg['algolia_app_id']}-dsn.algolia.net/1/indexes/{cfg['algolia_index']}/query"
 
 payload = {
     "query": "",
@@ -67,8 +94,8 @@ req = urllib.request.Request(
     ALGOLIA_URL,
     data=json.dumps(payload).encode("utf-8"),
     headers={
-        "X-Algolia-Application-Id": ALGOLIA_APP_ID,
-        "X-Algolia-API-Key": ALGOLIA_API_KEY,
+        "X-Algolia-Application-Id": cfg["algolia_app_id"],
+        "X-Algolia-API-Key": cfg["algolia_api_key"],
         "Content-Type": "application/json",
     },
 )

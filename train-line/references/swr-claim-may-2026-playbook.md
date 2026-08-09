@@ -89,7 +89,7 @@ Options visible: "Between 15 - 29 minutes", "Between 30 - 59 minutes", "Between 
 
 > "Halt with the pissing angular. Do it as a playwright / or camoufox but with a headed browser. Use the vision model if you have a problem seeing."
 
-Translation: When the Angular Material web form defeats programmatic interaction after reasonable effort (~15 tool calls), **pivot to a headed browser** (Camoufox or the Pi VNC persistent browser at `http://100.65.212.67:6080/vnc.html`) instead of continuing to bang on headless Playwright or `browser_type` against the same Angular overlay. Capture screenshots and use the vision model to understand what's actually rendered, then act accordingly. The user values "getting it done" over "automating every last pixel" — manual intervention on the last stubborn step is acceptable, but it is a **fallback**, not the primary strategy.
+Translation: When the Angular Material web form defeats programmatic interaction after reasonable effort (~15 tool calls), **pivot to a headed browser** (Camoufox or the persistent VNC browser at `http://<your-host>:6080/vnc.html`) instead of continuing to bang on headless Playwright or `browser_type` against the same Angular overlay. Capture screenshots and use the vision model to understand what's actually rendered, then act accordingly. The user values "getting it done" over "automating every last pixel" — manual intervention on the last stubborn step is acceptable, but it is a **fallback**, not the primary strategy.
 
 After selecting delay, the page advances to the **Ticket** step automatically. The question is: "Are you claiming for more than one ticket?" with Yes/No radio buttons.
 
@@ -193,7 +193,7 @@ The type options are **radio buttons** (not `cdk-option` cards). They are:
 - `checked = true` + `dispatchEvent('change'/'input')` — no state change
 - `page.mouse.click()` at computed bounding box — no state change
 
-**If all programmatic approaches fail after ≤15 total attempts on ANY Angular step, HARD HALT.** Pivot to a headed browser (VNC at `http://100.65.212.67:6080/vnc.html`) and use the vision model. A manual last step is acceptable — but this is a *fallback*, not the primary strategy. Do not exhaust the tool budget by looping the same dead-end approaches.
+**If all programmatic approaches fail after ≤15 total attempts on ANY Angular step, HARD HALT.** Pivot to a headed browser (VNC at `http://<your-host>:6080/vnc.html`) and use the vision model. A manual last step is acceptable — but this is a *fallback*, not the primary strategy. Do not exhaust the tool budget by looping the same dead-end approaches.
 
 **Note:** The April 14 2026 working script was lost — it existed only in `/tmp/`. Future sessions must save working scripts to the skill repo before claiming success.
 

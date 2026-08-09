@@ -64,8 +64,8 @@ curl -s -X POST "https://{APP_ID}-dsn.algolia.net/1/indexes/{INDEX_NAME}/query" 
 **Page:** `https://www.beanz.com/en-gb/coffee`
 
 **Algolia credentials (from `__NEXT_DATA__`):**
-- App ID: `VBT275CJRZ`
-- Search API Key: `93a2a727bf6bfa039a385e9c922e3daf`
+- App ID: `VBT275CJRZ` (example — beanz.com)
+- Search API Key: `93a2a...daf` (truncated — discover your own)
 - Base index: `Beanz`
 
 **UK-specific index name:** `Beanz_UK` (discovered by testing `Beanz_en_GB`, `Beanz_GB`, `Beanz_UK`)

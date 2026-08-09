@@ -20,10 +20,19 @@ import urllib.request
 import urllib.parse
 from pathlib import Path
 
-# Algolia config (same as beanz-query.py)
-ALGOLIA_APP_ID = "VBT275CJRZ"
-ALGOLIA_API_KEY = "93a2a727bf6bfa039a385e9c922e3daf"
-ALGOLIA_INDEX = "Beanz_UK"
+# Algolia credentials loaded from config.json (see config.example.json)
+import os
+_config_path = os.path.join(os.path.dirname(__file__), "..", "config.json")
+if os.path.exists(_config_path):
+    with open(_config_path) as _f:
+        _cfg = json.load(_f)
+    ALGOLIA_APP_ID = _cfg["algolia_app_id"]
+    ALGOLIA_API_KEY = _cfg["algolia_api_key"]
+    ALGOLIA_INDEX = _cfg.get("algolia_index", "Beanz_UK")
+else:
+    ALGOLIA_APP_ID = os.environ.get("BEANZ_ALGOLIA_APP_ID", "")
+    ALGOLIA_API_KEY = os.environ.get("BEANZ_ALGOLIA_API_KEY", "")
+    ALGOLIA_INDEX = os.environ.get("BEANZ_ALGOLIA_INDEX", "Beanz_UK")
 ALGOLIA_URL = f"https://{ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/{ALGOLIA_INDEX}/query"
 
 

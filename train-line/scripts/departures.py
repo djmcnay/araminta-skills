@@ -16,13 +16,15 @@ trains that stop at the destination (even as an intermediate stop).
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
 from zeep import Client, Settings, xsd
 
 WSDL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
-TOKEN = "daea0184-9948-4e43-b63b-dff3638555ca"
+# Get a free API token from https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/
+TOKEN = os.environ.get("DARWIN_API_TOKEN", "")
 
 STATIONS_FILE = Path(__file__).parent.parent / "config" / "stations.json"
 
