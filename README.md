@@ -1,20 +1,16 @@
 # araminta-skills
 
-A curated collection of portable [Hermes Agent](https://hermes-agent.nousresearch.com) skills, installable via the Hermes skills tap mechanism.
+A collection of portable agent skills, installable via the Hermes Agent skills tap mechanism. Designed to be harness-agnostic: the SKILL.md format is a plain markdown contract that any AI agent with browser tools can follow.
 
-These are generic, reusable skills that work for any Hermes user. They contain no user-specific paths, credentials, or persona references. A few may need light adaptation for your environment (noted below).
-
-## Install
-
-Register this repo as a tap source, then install individual skills:
+## Install (Hermes Agent)
 
 ```bash
 hermes skills tap add djmcnay/araminta-skills
 hermes skills search --source github
-hermes skills install <skill-name>
+hermes skills install amazon
 ```
 
-Or install everything at once:
+Or install everything:
 
 ```bash
 hermes skills tap add djmcnay/araminta-skills
@@ -23,37 +19,33 @@ hermes skills update
 
 ## Skills
 
-| Skill | Description | Portability |
-|-------|-------------|-------------|
-| `formal-contract-drafting` | Draft clean, fully populated formal agreements (tenancy, side letters, contracts) from scratch using Markdown to PDF/HTML. | Fully portable. |
-| `hermes-api-troubleshooting` | Diagnostics and resolution for Hermes API authentication failures (401s), config drift, and provider fallback issues. | Fully portable. |
-| `retrieve-redacted-secrets` | Workaround for platform output filters that redact secrets (API keys, passwords) in config files. Includes terminal-based retrieval patterns. | Fully portable. |
-| `qm` | Quartermaster: a non-blocking Codex CLI sub-agent pattern. Fires `codex exec` as a background process, returns immediately, notifies on completion. For multi-file coding tasks. | Portable. May need model name adjustment (defaults to gpt-5.5). |
-| `browser-display` | Remote browser viewing via TigerVNC + noVNC + Tailscale Funnel. Shows the user a live browser screen over the web. | Portable with adaptation. Configured for Raspberry Pi + Tailscale. Adjust hostname, funnel path, and display number for your setup. |
-| `research` | Multi-agent research pipeline for product evaluation, academic literature review, and general web research. Spawns parallel subagents for scraping, runs analysis and hallucination verification, delivers structured reports. | Portable with adaptation. Vault path defaults to `~/Documents/GitHub/araminta-vault/research/`. Adjust for your vault layout. |
+| Skill | Description |
+|-------|-------------|
+| `amazon` | Browse, shop, and manage returns on Amazon. Reorder past purchases, fuzzy search, best-value unit pricing, product research, basket management, and return initiation. Works with any persistent browser session. |
+
+More skills will be added as they are genericised from the araminta-toolshed.
+
+## Philosophy
+
+The SKILL.md format is a plain markdown contract. It describes *what to do* and *how to do it* in terms any agent can follow. It does not depend on Hermes-specific tool names, user-specific paths, or persona-specific context.
+
+Skills here are genericised versions of real production skills:
+- User names replaced with "the user"
+- Personal addresses/postcodes replaced with placeholders
+- Harness-specific tool names described by function, not by API name
+- Configuration values (CDP ports, browser profiles) described as patterns to adapt
+
+The source of truth for each skill is this repo. Local copies are deployments.
 
 ## Structure
-
-Each skill is a top-level directory containing:
 
 ```
 <skill-name>/
   SKILL.md              # The skill definition (frontmatter + instructions)
   references/           # Supporting documentation, worked examples, edge cases
-  templates/            # Copy-and-modify starters (where applicable)
   scripts/              # Runnable helpers (where applicable)
-  tests/                # Pytest tests (where applicable)
+  templates/            # Copy-and-modify starters (where applicable)
 ```
-
-## Updating
-
-Tap-installed skills are editable local copies. However, `hermes skills update` will overwrite local edits with the repo version. The intended workflow:
-
-1. Edit the skill in this repo
-2. Commit and push to GitHub
-3. Run `hermes skills update` on each machine to pull changes
-
-This repo is the source of truth. Local copies are deployments.
 
 ## License
 
