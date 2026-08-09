@@ -1,0 +1,18 @@
+{
+  "_doc": "Station aliases. Add your own stations here. CRS codes are 3-letter UK rail codes.",
+  "aliases": {
+    "london": {"crs": "WAT", "name": "London Waterloo"},
+    "waterloo": {"crs": "WAT", "name": "London Waterloo"},
+    "euston": {"crs": "EUS", "name": "London Euston"},
+    "paddington": {"crs": "PAD", "name": "London Paddington"},
+    "victoria": {"crs": "VIC", "name": "London Victoria"},
+    "portsmouth": {"crs": "PMH", "name": "Portsmouth Harbour"},
+    "southampton": {"crs": "SOU", "name": "Southampton Central"},
+    "guildford": {"crs": "GLD", "name": "Guildford"},
+    "woking": {"crs": "WOK", "name": "Woking"}
+  },
+  "favourites": [
+    {"crs": "WAT", "name": "London Waterloo"}
+  ],
+  "_custom_aliases_help": "Add your own aliases like 'home', 'work', etc. Example: \"home\": {\"crs\": \"LIP\", \"name\": \"Liphook\"}"
+}

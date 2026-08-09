@@ -22,6 +22,7 @@ hermes skills update
 | Skill | Description |
 |-------|-------------|
 | `amazon` | Browse, shop, and manage returns on Amazon. Reorder past purchases, fuzzy search, best-value unit pricing, product research, basket management, and return initiation. Works with any persistent browser session. |
+| `train-line` | UK train live departures (National Rail Darwin API), journey planning with pricing (MyTrainPal), and SWR delay repay claim automation (Playwright). Customise stations.json for your own stations. |
 
 More skills will be added as they are genericised from the araminta-toolshed.
 
