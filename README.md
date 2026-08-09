@@ -25,6 +25,9 @@ hermes skills update
 | `train-line` | UK train live departures (National Rail Darwin API), journey planning with pricing (MyTrainPal), and SWR delay repay claim automation (Playwright). Customise stations.json for your own stations. |
 | `email-policy` | Policy for an AI assistant's own email inbox. Classify inbound, decide reply channel, case-match against a task board, draft-not-send. Works with AgentMail or similar. |
 | `email-triage` | Strict policy for triaging a user's personal Gmail. Zero-deletion, filing, voucher preservation, case matching. Companion to email-policy. |
+| `formal-contract-drafting` | Draft clean, fully populated formal agreements from scratch. Tenancy agreements, side letters, contracts. Markdown to PDF/HTML/RTF pipeline. No templates needed. |
+| `beanz` | Browse and purchase specialty coffee from beanz.com. Algolia API catalog queries, cart automation via Playwright, order history extraction from Gmail. |
+| `price-spy` | Price watchlist. Track products across retailers, alert on price drops, stock changes, and availability. Amazon, Shopify, and generic scraping. Cron-friendly silent mode. |
 
 More skills will be added as they are genericised from the araminta-toolshed.
 
@@ -48,6 +51,7 @@ The source of truth for each skill is this repo. Local copies are deployments.
   references/           # Supporting documentation, worked examples, edge cases
   scripts/              # Runnable helpers (where applicable)
   templates/            # Copy-and-modify starters (where applicable)
+  items.json             # Data files (where applicable, e.g. price-spy watchlist)
 ```
 
 ## License

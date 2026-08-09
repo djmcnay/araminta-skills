@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "example-item",
+      "name": "Example Product",
+      "url": "https://www.amazon.co.uk/dp/B0XXXXXXXX",
+      "asin": "B0XXXXXXXX",
+      "price_source": "amazon",
+      "tracking_mode": "price_threshold",
+      "target_price": 30.0,
+      "last_paid": 35.0,
+      "currency": "GBP",
+      "conditions": [
+        "new"
+      ],
+      "variants": [],
+      "price_history": [
+        {
+          "date": "2026-01-01",
+          "condition": "new",
+          "price": 34.99,
+          "variant": null,
+          "observation": "Initial check. In stock."
+        }
+      ],
+      "added": "2026-01-01",
+      "active": true,
+      "notes": "Example item. Replace with your own watchlist."
+    }
+  ]
+}
