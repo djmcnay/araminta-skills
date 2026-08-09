@@ -6,3 +6,6 @@ __pycache__/
 *.log
 tmp/
 .DS_Store
+# Local skill configuration files
+config.json
+*/config.json

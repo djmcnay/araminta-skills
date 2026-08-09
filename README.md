@@ -28,6 +28,10 @@ hermes skills update
 | `formal-contract-drafting` | Draft clean, fully populated formal agreements from scratch. Tenancy agreements, side letters, contracts. Markdown to PDF/HTML/RTF pipeline. No templates needed. |
 | `beanz` | Browse and purchase specialty coffee from beanz.com. Algolia API catalog queries, cart automation via Playwright, order history extraction from Gmail. |
 | `price-spy` | Price watchlist. Track products across retailers, alert on price drops, stock changes, and availability. Amazon, Shopify, and generic scraping. Cron-friendly silent mode. |
+| `research` | Multi-agent research pipeline for product evaluation, academic literature review, and general web research. Parallel collection, analysis, verification, and structured reports. |
+| `social-media-tracker` | Track YouTube/social channels, collect new posts, extract metadata/transcripts with yt-dlp and fallback workflows, and produce concise digests. |
+| `retrieve-redacted-secrets` | Safely retrieve or transfer redacted local credentials when platform output filters obscure required values. Includes auth-state injection patterns. |
+| `nordvpn` | Control NordVPN on a host machine via the native CLI, with status/connect/disconnect helpers and killswitch safety guidance. |
 
 More skills will be added as they are genericised from the araminta-toolshed.
 
@@ -60,7 +64,7 @@ MIT
 
 ## Author
 
-Araminta Milland-Wilde (with David McNay)
+Araminta Milland-Wilde (with contributors)
 
 ## Related
 
