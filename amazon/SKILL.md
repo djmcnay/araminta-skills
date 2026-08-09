@@ -419,3 +419,135 @@ Amazon's AUI "Continue" and "Confirm" buttons are `<span>` wrappers around a hid
 - Always show prices in GBP (or local currency for other regions)
 - Prefer Prime-eligible items when equivalent options exist
 - Record useful product research to skill files if the user wants to save it
+
+## Test Cases
+
+### Test 1: Reorder-like
+> "please order me childs farm bubble bath"
+
+**Expected behaviour:**
+- Identify previous order: Childs Farm Kids Bluey Bubble Bath, Bluey-Berry, 250ml — £3.70
+- Apply reorder-like logic: brand = Childs Farm, product type = bubble bath
+- Search Amazon, find cheapest Childs Farm bubble bath
+- Present cheapest option (and note price change vs £3.70)
+- Do NOT just return the exact same Bluey-Berry — find the cheapest
+
+**Last tested:** 15 Apr 2026 — PASS
+- Found: Childs Farm bubble bath £3.00 (Raspberry variant, cheapest)
+- Previous order price: £3.70 (Bluey-Berry, 250ml)
+- Correctly identified cheapest variant rather than returning the exact same one
+
+### Test 2: Reorder (exact)
+> "please reorder me another bottle of the Arran 10 year"
+
+**Expected behaviour:**
+- Search order history/email for "Arran 10 year"
+- Find the exact product (single malt whisky, specific bottling)
+- Return the same product link
+- Note price change if any
+- Do NOT substitute a different whisky or different Arran expression
+- **If not logged in:** send the user the direct product link instead of claiming basket add
+
+**Last tested:** 15 Apr 2026 — PASS (with edge case found and fixed)
+- Found: Arran 10 Year Single Malt 70cl (B001HUDTPK)
+- Current price: £42.50 (was £38.75 in Oct 2022 — +£3.75)
+- Correctly returned the same product, noted price increase
+- **Edge case:** Session was not logged in — skill falsely reported "added to basket" after clicking the keyboard shortcut button (which wasn't the real add-to-cart button). The actual `#add-to-cart-button` did increase the nav cart count to 1, but the session was not authenticated so this was misleading.
+- **Fix applied:** Skill now checks login state before basket operations and sends direct link when not logged in.
+
+### Test 3: Fuzzy search (specific item)
+> "please order me the coconut detangler spray"
+
+**Expected behaviour:**
+- Search Amazon for "coconut detangler spray"
+- Narrow to best match: Childs Farm Coco-Nourish Leave-in Conditioner Hair Spray (found in previous order)
+- Confirm this is likely the right product
+- Send the link with price
+- Do NOT treat this as reorder-like (no need to find cheapest alternative — find the specific item)
+
+**Last tested:** 15 Apr 2026 — PASS
+- Found: Childs Farm Coco-Nourish Leave-in Conditioner Hair Spray
+- Current price: £7.03 (was £4.95 previously, £5.00 before that)
+- Correctly matched the specific item, not cheapest alternative
+
+### Test 4: Best Value (unit pricing)
+> "what's the best value cheeky panda toilet rolls"
+
+**Expected behaviour:**
+- Navigate to the product page on Amazon
+- Extract all size/pack variants with prices and per-unit pricing
+- Build comparison table showing price per 100 sheets for each variant
+- Highlight that bulk is NOT always best (e.g. 24-pack at £0.39/100 sheets is worse than 9-pack at £0.33/100 sheets)
+- Recommend the best value (48-pack at £0.32/100 sheets)
+- Explain the unit measure: "pence per sheet"
+- Check other sellers if available
+
+**Last tested:** 15 May 2026 — PASS
+**Live data (48-pack page, B07TS96K9G):**
+
+| Size | Price | £/100 Sheets |
+|------|-------|--------------|
+| 4-pack | £4.60 | £0.58 |
+| 9-pack | £6.95 | £0.39 |
+| 24-pack | £17.00 | £0.35 ← tied best value |
+| 9x2 | £13.90 | £0.39 |
+| 9x5 | £39.90 | £0.44 — worse than single 9-packs! |
+| 48-pack | £34.00 | £0.35 ← tied best value |
+
+Best value: **24-pack and 48-pack tied at £0.35/100 sheets** (9-pack close at £0.39 for less upfront spend). Note: the 24-pack variant is selected via vision-annotated snapshot + numbered ref click on the parent page (B07TS96K9G) — it is NOT the separate listing at B0C9MVD9S1 (£42.99 for 24 rolls, different product).
+
+### Test 5: Research — Amazon-only (commodity product)
+> "can you find me a good fine-mesh strainer"
+
+**Expected behaviour:**
+- Classify as **Amazon-only** (kitchen utensil, commodity category)
+- Search Amazon for "fine mesh strainer stainless steel"
+- Evaluate results on: brand reputation, star rating, review count, price, material quality
+- Consider generic/Chinese options — for a strainer these are likely fine, so include them but label clearly
+- Present ranked list of ~3-5 with reasoning
+- Explain why each ranks where it does (e.g. "best all-rounder", "genuine premium", "best budget")
+
+**Last tested:** 15 Apr 2026 — PASS
+- Budget pick: Anaeat 3-pack (8+14+20cm) — £7.64, 4.4 stars, 2,328 reviews
+- Best all-rounder: OXO Good Grips 20.3cm — £22.00, 4.5 stars, 2,764 reviews
+- Premium: Rösle 24cm — £47.64, 4.8 stars, 687 reviews
+- Correctly classified as Amazon-only, included generic option labelled as budget pick
+
+### Test 6: Research — Prior research required (gift research)
+> "can you suggest some ideas for a birthday present for a 10-year old girl, something between £25-50 (tho I'll go up to a max of £100). Preferably an outside based activity."
+
+**Expected behaviour:**
+- Classify as **Prior research required** (gift idea needs broader context)
+- Search the internet for: "best outdoor birthday gifts for 10 year old girl 2026", gift guides, parenting recommendations
+- Identify top ~5 promising products from internet research
+- Then cross-reference each on Amazon — find the product or closest equivalent
+- Present ranked list with: product name, Amazon link, price, why it's a good gift for this age
+- Note if a product found in research isn't available on Amazon (but don't search other retailers unless asked)
+- For gifts: no generic/knock-off alternatives unless genuinely better
+
+**Last tested:** 15 Apr 2026 — PASS
+- Researched via Wirecutter, REI, Forbes, Himiway gift guides
+- Cross-referenced on Amazon UK:
+  1. Barefoot Slackline Kit 60ft with training line — £59.22, 4.8 stars, 100 reviews (best for active/outdoor play)
+  2. JUMBLE Kids Fort Building Kit 145-piece — ~£35-50, 4.5 stars, 520+ reviews (creative outdoor play)
+  3. ROBOTIME Bug Catcher & Explorer Kit 8-in-1 — £25.99, 4.3 stars (nature exploration, budget pick)
+  4. Rebo Ninja Line obstacle course — ~£30-50 (physical challenge, garden-based)
+  5. Kids hiking daypack + binoculars set — ~£25-40 (practical outdoor gear)
+- Correctly classified as prior research, searched internet first then cross-referenced Amazon
+
+### Test 7: Returns (BrosTrend WiFi dongle)
+> "return the wifi dongle"
+
+**Expected behaviour:**
+- Find the order in order history (BrosTrend AX900 Mini Linux WiFi Dongle, Order #203-0317442-4612374)
+- Navigate to return cart
+- Select reason: Incompatible (`RO_CR-NOT_COMPATIBLE`)
+- Comment: "Wireless dongle never enumerated on Raspberry Pi. AIC8800 chipset incompatible."
+- Refund: Amazon account balance
+- Carrier: Evri Dropoff (selected automatically after Post Office stalled)
+- Result: Confirmed, QR code generated
+
+**Last tested:** 23 May 2026 — PASS (with carrier fallback)
+- Post Office carrier radio stalled the form
+- Script automatically fell back to Evri Drop Off
+- Return confirmed, QR code generated, drop by 21 Jun 2026
