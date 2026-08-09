@@ -1,3 +1,14 @@
+---
+name: araminta-amazon
+description: Browse, shop, and manage returns on Amazon. Reorder past purchases, fuzzy search, best-value unit pricing, product research, basket management, and return initiation. Works with any persistent browser session.
+ownership: collab
+version: 1.0.1
+author: Araminta
+license: MIT
+tags: [amazon, shopping, returns, cdp, browser]
+category: shopping
+---
+
 # Amazon Shopping Skill
 
 Browse, shop, and manage returns on Amazon. Supports reorder, fuzzy search, best-value comparison, product research, basket management, and return initiation.
