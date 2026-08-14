@@ -23,7 +23,7 @@ metadata:
 
 Beanz UK exposes its product catalogue through a public, read-only Algolia index. This skill filters and compares that catalogue without a logged-in browser. Its default query is a useful general espresso profile: 1kg, caffeinated, medium or darker roast.
 
-The public Algolia credentials are embedded in Beanz's storefront and are not account secrets. `config.example.json` is therefore a safe clean-install fallback. A local `config.json` or environment variables can override them if Beanz changes its public search configuration.
+The script reads Beanz's public, read-only Algolia configuration from the live catalogue page each time it runs. It has no local configuration or account data.
 
 ## When to use
 
@@ -47,14 +47,9 @@ python3 scripts/beanz-query.py --save --format markdown
 
 The output is sorted by price and identifies the query timestamp. `--save` writes a local snapshot for comparison, not a purchase record.
 
-## Configuration
+## Configuration discovery
 
-Configuration precedence is:
-
-1. An ignored `config.json` alongside this file.
-2. The committed `config.example.json` public fallback.
-
-To rediscover the values if the storefront changes:
+No configuration file is required. `scripts/beanz-query.py` fetches the public Beanz catalogue page with a browser user agent and extracts the read-only search configuration that Beanz itself publishes. If Beanz changes its page structure, rediscover the fields with:
 
 ```bash
 python3 ../price-spy/scripts/algolia-retail-query.py discover https://www.beanz.com/en-gb/coffee

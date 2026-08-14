@@ -16,27 +16,35 @@ Outputs a table sorted by price (low to high).
 
 import argparse
 import json
+import re
 import sys
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-# The Beanz Algolia search credentials are public, read-only values embedded in
-# the storefront. A local config.json may override the committed fallback.
-_skill_dir = Path(__file__).resolve().parent.parent
-_config_path = _skill_dir / "config.json"
-_example_config_path = _skill_dir / "config.example.json"
-if _config_path.exists():
-    _cfg = json.loads(_config_path.read_text())
-elif _example_config_path.exists():
-    _cfg = json.loads(_example_config_path.read_text())
-else:
-    _cfg = {}
-ALGOLIA_APP_ID = str(_cfg.get("algolia_app_id") or "")
-ALGOLIA_API_KEY = str(_cfg.get("algolia_api_key") or "")
-ALGOLIA_INDEX = str(_cfg.get("algolia_index") or "Beanz_UK")
-if not ALGOLIA_APP_ID or not ALGOLIA_API_KEY:
-    raise RuntimeError("No Beanz Algolia configuration found. Restore config.example.json or create a local config.json.")
+# Beanz embeds its public, read-only Algolia configuration in the catalogue page.
+# Discover it for each run rather than shipping a stale key in the package.
+def discover_algolia_config() -> tuple[str, str, str]:
+    request = urllib.request.Request(
+        "https://www.beanz.com/en-gb/coffee",
+        headers={"User-Agent": "Mozilla/5.0 (compatible; BeanzShopping/1.0)"},
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        storefront = response.read().decode("utf-8", errors="replace")
+
+    def field(name: str) -> str:
+        match = re.search(rf'"{name}":"([^"\\]+)"', storefront)
+        return match.group(1) if match else ""
+
+    app_id = field("algolia_app_id")
+    api_key = field("algolia_search_api_key")
+    index = field("algolia_index_name") or "Beanz_UK"
+    if not app_id or not api_key:
+        raise RuntimeError("Beanz storefront did not expose usable Algolia catalogue configuration.")
+    return app_id, api_key, index
+
+
+ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX = discover_algolia_config()
 ALGOLIA_URL = f"https://{ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/{ALGOLIA_INDEX}/query"
 
 # Default filter profile
