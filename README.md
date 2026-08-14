@@ -26,7 +26,7 @@ hermes skills update
 | `email-policy` | Policy for an AI assistant's own email inbox. Classify inbound, decide reply channel, case-match against a task board, draft-not-send. Works with AgentMail or similar. |
 | `email-triage` | Strict policy for triaging a user's personal Gmail. Zero-deletion, filing, voucher preservation, case matching. Companion to email-policy. |
 | `formal-contract-drafting` | Draft clean, fully populated formal agreements from scratch. Tenancy agreements, side letters, contracts. Markdown to PDF/HTML/RTF pipeline. No templates needed. |
-| `beanz` | Browse and purchase specialty coffee from beanz.com. Algolia API catalog queries, cart automation via Playwright, order history extraction from Gmail. |
+| `beanz-shopping` | Browse and compare Beanz UK coffee through the public Algolia catalogue. Account and purchase activity lives in the private `beanz-buying` skill. |
 | `price-spy` | Price watchlist. Track products across retailers, alert on price drops, stock changes, and availability. Amazon, Shopify, and generic scraping. Cron-friendly silent mode. |
 | `araminta-research` | Multi-agent research pipeline for product evaluation, academic literature review, and general web research. Spawns parallel subagents for data collection, analysis, hallucination verification, and structured reports. |
 | `social-media-tracker` | Track YouTube/social channels, collect new posts, extract metadata/transcripts with yt-dlp and fallback workflows, and produce concise digests. |

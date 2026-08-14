@@ -21,19 +21,24 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Algolia credentials loaded from config.json (see config.example.json)
+# The Beanz Algolia search credentials are public, read-only values embedded in
+# the storefront. A local config.json may override them, but a clean install
+# works directly from the committed example configuration.
 import os
-_config_path = os.path.join(os.path.dirname(__file__), "..", "config.json")
-if os.path.exists(_config_path):
-    with open(_config_path) as _f:
-        _cfg = json.load(_f)
-    ALGOLIA_APP_ID = _cfg["algolia_app_id"]
-    ALGOLIA_API_KEY = _cfg["algolia_api_key"]
-    ALGOLIA_INDEX = _cfg.get("algolia_index", "Beanz_UK")
+_skill_dir = Path(__file__).resolve().parent.parent
+_config_path = _skill_dir / "config.json"
+_example_config_path = _skill_dir / "config.example.json"
+if _config_path.exists():
+    _cfg = json.loads(_config_path.read_text())
+elif _example_config_path.exists():
+    _cfg = json.loads(_example_config_path.read_text())
 else:
-    ALGOLIA_APP_ID = os.environ.get("BEANZ_ALGOLIA_APP_ID", "")
-    ALGOLIA_API_KEY = os.environ.get("BEANZ_ALGOLIA_API_KEY", "")
-    ALGOLIA_INDEX = os.environ.get("BEANZ_ALGOLIA_INDEX", "Beanz_UK")
+    _cfg = {}
+ALGOLIA_APP_ID = str(os.environ.get("BEANZ_ALGOLIA_APP_ID") or _cfg.get("algolia_app_id") or "")
+ALGOLIA_API_KEY = str(os.environ.get("BEANZ_ALGOLIA_API_KEY") or _cfg.get("algolia_api_key") or "")
+ALGOLIA_INDEX = str(os.environ.get("BEANZ_ALGOLIA_INDEX") or _cfg.get("algolia_index") or "Beanz_UK")
+if not ALGOLIA_APP_ID or not ALGOLIA_API_KEY:
+    raise RuntimeError("No Beanz Algolia configuration found. Restore config.example.json or supply environment overrides.")
 ALGOLIA_URL = f"https://{ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/{ALGOLIA_INDEX}/query"
 
 # Default filter profile
