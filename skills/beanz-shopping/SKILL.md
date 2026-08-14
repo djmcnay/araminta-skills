@@ -51,9 +51,8 @@ The output is sorted by price and identifies the query timestamp. `--save` write
 
 Configuration precedence is:
 
-1. `BEANZ_ALGOLIA_*` environment variables.
-2. An ignored `config.json` alongside this file.
-3. The committed `config.example.json` public fallback.
+1. An ignored `config.json` alongside this file.
+2. The committed `config.example.json` public fallback.
 
 To rediscover the values if the storefront changes:
 

@@ -22,9 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # The Beanz Algolia search credentials are public, read-only values embedded in
-# the storefront. A local config.json may override them, but a clean install
-# works directly from the committed example configuration.
-import os
+# the storefront. A local config.json may override the committed fallback.
 _skill_dir = Path(__file__).resolve().parent.parent
 _config_path = _skill_dir / "config.json"
 _example_config_path = _skill_dir / "config.example.json"
@@ -34,11 +32,11 @@ elif _example_config_path.exists():
     _cfg = json.loads(_example_config_path.read_text())
 else:
     _cfg = {}
-ALGOLIA_APP_ID = str(os.environ.get("BEANZ_ALGOLIA_APP_ID") or _cfg.get("algolia_app_id") or "")
-ALGOLIA_API_KEY = str(os.environ.get("BEANZ_ALGOLIA_API_KEY") or _cfg.get("algolia_api_key") or "")
-ALGOLIA_INDEX = str(os.environ.get("BEANZ_ALGOLIA_INDEX") or _cfg.get("algolia_index") or "Beanz_UK")
+ALGOLIA_APP_ID = str(_cfg.get("algolia_app_id") or "")
+ALGOLIA_API_KEY = str(_cfg.get("algolia_api_key") or "")
+ALGOLIA_INDEX = str(_cfg.get("algolia_index") or "Beanz_UK")
 if not ALGOLIA_APP_ID or not ALGOLIA_API_KEY:
-    raise RuntimeError("No Beanz Algolia configuration found. Restore config.example.json or supply environment overrides.")
+    raise RuntimeError("No Beanz Algolia configuration found. Restore config.example.json or create a local config.json.")
 ALGOLIA_URL = f"https://{ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/{ALGOLIA_INDEX}/query"
 
 # Default filter profile
