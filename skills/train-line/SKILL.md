@@ -21,7 +21,7 @@ API-first UK rail information. All actions in this skill are read-only.
 
 ## Configuration
 
-Copy `config.example.json` to the ignored `config.json` and replace the placeholder with an OpenLDBWS token:
+For a source checkout, copy `config.example.json` to the ignored `config.json`. A skills.sh installation deliberately includes only `SKILL.md` and executable scripts, so create the ignored `config.json` directly in the installed skill directory using this shape:
 
 ```json
 {

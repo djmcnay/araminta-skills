@@ -22,8 +22,8 @@ def load_token(config_path: Path = CONFIG_PATH) -> str:
     """Load and validate a Darwin token without making a network request."""
     if not config_path.exists():
         raise ConfigurationError(
-            f"Darwin API token is not configured. Copy config.example.json to "
-            f"{config_path.name} and set darwin_api_token."
+            f"Darwin API token is not configured. Create {config_path.name} beside "
+            f"this script with a darwin_api_token value."
         )
     try:
         with config_path.open(encoding="utf-8") as handle:
