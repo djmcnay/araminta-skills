@@ -32,6 +32,7 @@ hermes skills update
 | `social-media-tracker` | Track YouTube/social channels, collect new posts, extract metadata/transcripts with yt-dlp and fallback workflows, and produce concise digests. |
 | `retrieve-redacted-secrets` | Safely retrieve or transfer redacted local credentials when platform output filters obscure required values. Includes auth-state injection patterns. |
 | `nordvpn` | Control NordVPN on a host machine via the native CLI, with status/connect/disconnect helpers and killswitch safety guidance. |
+| `hermes-sync-agent-skills` | Safely back up explicitly reviewed agent-authored local skills into an Araminta profile distribution. |
 
 More skills will be added as they are genericised from the araminta-toolshed.
 
