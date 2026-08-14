@@ -32,7 +32,7 @@ hermes skills update
 | `social-media-tracker` | Track YouTube/social channels, collect new posts, extract metadata/transcripts with yt-dlp and fallback workflows, and produce concise digests. |
 | `retrieve-redacted-secrets` | Safely retrieve or transfer redacted local credentials when platform output filters obscure required values. Includes auth-state injection patterns. |
 | `nordvpn` | Control NordVPN on a host machine via the native CLI, with status/connect/disconnect helpers and killswitch safety guidance. |
-| `hermes-sync-agent-skills` | Safely back up explicitly reviewed agent-authored local skills into an Araminta profile distribution. |
+| `hermes-sync-agent-skills` | Autonomously review and back up clearly marked local agent-authored skills into an Araminta profile distribution, with a local commit. |
 
 More skills will be added as they are genericised from the araminta-toolshed.
 
@@ -50,14 +50,19 @@ The source of truth for each skill is this repo. Local copies are deployments.
 
 ## Structure
 
+Hermes taps resolve skills from the repository's `skills/` directory. Every installable package therefore lives under that directory:
+
 ```
-<skill-name>/
-  SKILL.md              # The skill definition (frontmatter + instructions)
-  references/           # Supporting documentation, worked examples, edge cases
-  scripts/              # Runnable helpers (where applicable)
-  templates/            # Copy-and-modify starters (where applicable)
-  items.json             # Data files (where applicable, e.g. price-spy watchlist)
+skills/
+  <skill-name>/
+    SKILL.md            # The skill definition (frontmatter + instructions)
+    references/         # Supporting documentation, worked examples, edge cases
+    scripts/            # Runnable helpers (where applicable)
+    templates/          # Copy-and-modify starters (where applicable)
+    items.json          # Data files (where applicable, e.g. price-spy watchlist)
 ```
+
+This layout is intentional. Do not move installable skills back to repository root: a registered Hermes tap uses `skills/` as its source path.
 
 ## License
 
