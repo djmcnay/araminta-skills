@@ -1,5 +1,9 @@
 {
   "source_skills_root": "/path/to/.hermes/skills",
+  "araminta_checkout": "/path/to/araminta",
   "destination_agent_authored_root": "/path/to/araminta/skills/agent-authored",
-  "manifest_path": "agent-authored-manifest.json"
+  "bundled_manifest_paths": ["/path/to/hermes/bundled-skills.json"],
+  "hub_metadata_paths": ["/path/to/.hermes/hub-metadata.json"],
+  "external_skill_dirs": ["/path/to/external-skills"],
+  "commit_message": "backup agent-authored Hermes skills"
 }

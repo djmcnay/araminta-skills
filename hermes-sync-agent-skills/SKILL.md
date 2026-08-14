@@ -1,81 +1,61 @@
 ---
 name: hermes-sync-agent-skills
-description: Use when backing up reviewed agent-authored local skills safely.
+description: Autonomously inventory and back up clearly marked local agent-authored Hermes skills into Araminta, with a local distribution commit.
 ownership: collab
 ---
 
 # Hermes Sync Agent Skills
 
-Use this skill to make a reviewable backup of local, genuinely agent-authored Hermes skills into `skills/agent-authored/` in an Araminta profile distribution. It is deliberately conservative: it is a copy-out workflow, never an installer, and it does not modify `~/.hermes/skills`.
+When manually invoked as `/hermes-sync-agent-skills`, autonomously review the local Hermes skill inventory, inspect every automatically eligible candidate's content for portability and secrets, then run the noninteractive apply command. Do not ask David to maintain a manifest or approve individual entries. This workflow backs up only new agent-authored skills into the Araminta distribution and creates a local commit; it never pushes.
 
-## Safety contract
+`hermes-sync-minty` is the separate, later workflow for fetching, reconciling, and pushing that distribution.
 
-- Do not scan for, infer, or automatically select skills. Only manifest entries are eligible.
-- Add an entry only after a human has established that it was authored locally by an agent. Never list official bundled skills, hub/tap-installed skills, external-directory skills, archives, or skills of unknown provenance.
-- A manifest entry needs `origin: "agent-authored-local"`, non-empty `reviewed_by` and `review_note` fields, and one simple directory name. That declaration is an auditable human assertion, not a provenance detector.
-- Sources must be real direct children of `source_skills_root`. Source trees with any symlink are rejected. The backup uses ordinary copied files, never symlinks.
-- `araminta-skills` is a public tap. The private `araminta-private-skills` checkout is currently an external directory because Hermes cannot resolve authenticated private taps. It is excluded from this backup workflow as external material.
-- Begin every change with a dry run. Normal runs only copy or update files from selected sources; they never remove an existing destination tree or delete stale destination files.
-- Retiring a backup is exceptional: use a separately reviewed `retire` manifest entry and both `--prune` and `--allow-delete`.
+## Automatic ownership contract
 
-## Files
+New unilateral agent-authored skills must use this exact frontmatter signal in their `SKILL.md`:
 
-```
-hermes-sync-agent-skills/
-  SKILL.md
-  templates/config.example.json       # portable path placeholders
-  templates/agent-authored-manifest.example.json
-  scripts/sync_agent_authored_skills.py
-  tests/test_sync_agent_authored_skills.py
+```yaml
+---
+name: example
+ownership: agent-authored
+---
 ```
 
-Create a local `config.json` by copying the example. It is gitignored. Point it at the local Hermes skills directory and the desired Araminta distribution path, for example the distribution's `skills/agent-authored` directory. Keep paths machine-specific only in this local file. The manifest can be a local file alongside `config.json`, or a checked-in reviewed artifact when appropriate; `manifest_path` may be absolute or relative to the config file.
+See `templates/agent-authored-skill.example.md` for a portable complete example.
 
-## Manifest review
+This is the only automatic eligibility signal. Legacy or unmarked skills are reported as `UNKNOWN` for agent review and are never copied. The scanner does not infer ownership from names, timestamps, text, or a Hermes listing.
 
-Start from `agent-authored-manifest.example.json`. Each selected skill needs a clear review note stating why it is agent-authored and why it is not from a bundle, hub, tap, external directory, or archive. The script copies no directory not named here, even if it is located under the configured Hermes root.
+It deterministically scans direct local entries by name and excludes, with a reported reason: Hermes bundled skills named in configured manifests, hub/tap-installed skills named in configured metadata, configured external directories, archive files, symlinked entries or trees, and obvious secret-like content. Sources and copied output always use ordinary files, never symlinks. The secret check is a guardrail, not a substitute for inspecting eligible content before applying.
 
-Before execution, review:
+## Local configuration
 
-1. Every name and provenance assertion in the manifest.
-2. The configured destination is the intended `skills/agent-authored` directory in the Araminta distribution.
-3. The dry-run output: each `COPY source -> destination` line and any proposed `DELETE` line.
+Copy `templates/config.example.json` to local `config.json`; it is ignored by Git. Use only portable placeholders in examples and never commit machine paths, tokens, credentials, or private values. The configured `araminta_checkout` must be the top level of a real Git checkout, and `destination_agent_authored_root` must resolve within it.
 
-## Commands
+Supply any available Hermes bundled manifests in `bundled_manifest_paths`, hub/tap metadata in `hub_metadata_paths`, and every external source root in `external_skill_dirs`. The scanner accepts one path or an array for each metadata field and conservatively extracts ordinary names from common metadata schemas. Omit an unavailable metadata source rather than guessing its contents.
 
-Run a dry run first:
+## Autonomous workflow
+
+First inventory the source:
 
 ```bash
-python3 scripts/sync_agent_authored_skills.py --config config.json --dry-run
+python3 scripts/sync_agent_authored_skills.py --config config.json --inventory
 ```
 
-After approving exactly that plan, copy:
+For each `ELIGIBLE` entry, inspect its files: verify it is genuinely unilateral agent work, portable, and contains no secrets or machine values. `EXCLUDED` and `UNKNOWN` entries remain untouched. Then preview and apply:
 
 ```bash
-python3 scripts/sync_agent_authored_skills.py --config config.json
+python3 scripts/sync_agent_authored_skills.py --config config.json --apply --dry-run
+python3 scripts/sync_agent_authored_skills.py --config config.json --apply
 ```
 
-Normal sync does not delete stale backups. To remove one, place only its simple name in `retire`, review the dry run, then use the two explicit acknowledgements:
+Apply copies only eligible skills, does not delete stale distribution trees, stages only paths changed by that run, and creates one local Git commit only when there is a change. It refuses symlinked paths, a non-Git checkout, a destination outside the checkout, and an already-dirty destination. It never runs a push command.
 
-```bash
-python3 scripts/sync_agent_authored_skills.py --config config.json --prune --allow-delete --dry-run
-python3 scripts/sync_agent_authored_skills.py --config config.json --prune --allow-delete
-```
+## Developer verification
 
-The tool refuses unsafe names, duplicate selections, missing reviews, wrong provenance assertions, nonexistent sources, symlinked source trees, and symlinked destinations. It never writes to the configured source root.
-
-## AI-agent operating notes
-
-An AI agent must not add skills to the manifest based on directory names, timestamps, content guesses, or a Hermes listing. Ask the maintainer for an explicit provenance decision if a skill is not already known to be agent-authored. Do not create `config.json` with personal paths in a commit, and do not place credentials or tokens in configuration, manifests, or copied skill content.
-
-The script's output is deterministic: selected copies and retirements are name-sorted. Treat the dry-run output as the change request. If it contains an unexpected path, stop rather than editing roots or bypassing the checks.
-
-## Developer notes and verification
-
-The script uses only Python's standard library. Its module docstring describes purpose, architecture, intent, and use. Tests use temporary directories and cover explicit selection (including an unselected official-looking directory), dry-run no-write behavior, ordinary copied files, symlink rejection, and deletion's double opt-in/no-delete default.
-
-Run:
+The implementation uses only the Python standard library. Its module docstring records its purpose, selection architecture, and safety boundary. Tests use temporary Git repositories and cover automatic eligibility, metadata/external/archive exclusions, unknown unmarked skills, dry-run no-write, copy plus commit, no-change no-commit, symlink rejection, and no deletion by default.
 
 ```bash
 python3 -m unittest discover -s tests -v
+python3 -m py_compile scripts/sync_agent_authored_skills.py
+git diff --check
 ```
