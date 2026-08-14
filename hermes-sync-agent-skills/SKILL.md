@@ -14,6 +14,7 @@ Use this skill to make a reviewable backup of local, genuinely agent-authored He
 - Add an entry only after a human has established that it was authored locally by an agent. Never list official bundled skills, hub/tap-installed skills, external-directory skills, archives, or skills of unknown provenance.
 - A manifest entry needs `origin: "agent-authored-local"`, non-empty `reviewed_by` and `review_note` fields, and one simple directory name. That declaration is an auditable human assertion, not a provenance detector.
 - Sources must be real direct children of `source_skills_root`. Source trees with any symlink are rejected. The backup uses ordinary copied files, never symlinks.
+- `araminta-skills` is a public tap. The private `araminta-private-skills` checkout is currently an external directory because Hermes cannot resolve authenticated private taps. It is excluded from this backup workflow as external material.
 - Begin every change with a dry run. Normal runs only copy or update files from selected sources; they never remove an existing destination tree or delete stale destination files.
 - Retiring a backup is exceptional: use a separately reviewed `retire` manifest entry and both `--prune` and `--allow-delete`.
 
