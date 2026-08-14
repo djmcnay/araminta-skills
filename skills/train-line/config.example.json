@@ -1,5 +1,3 @@
 {
-    "darwin_api_token": "YOUR_DARWIN_TOKEN_HERE",
-    "swr_login_email": "your-email@example.com",
-    "swr_bacs_sort_code": "00-00-00"
+  "darwin_api_token": "YOUR_DARWIN_TOKEN_HERE"
 }

@@ -22,7 +22,7 @@ hermes skills update
 | Skill | Description |
 |-------|-------------|
 | `araminta-amazon` | Browse, shop, and manage returns on Amazon. Reorder past purchases, fuzzy search, best-value unit pricing, product research, basket management, and return initiation. Works with any persistent browser session. |
-| `train-line` | UK train live departures (National Rail Darwin API), journey planning with pricing (MyTrainPal), and SWR delay repay claim automation (Playwright). Customise stations.json for your own stations. |
+| `train-line` | API-first UK rail information: National Rail Darwin live departures and arrivals, read-only journey-link generation, and SWR JourneyCheck fallback. Customise only local deployments with environment-specific station aliases. |
 | `email-policy` | Policy for an AI assistant's own email inbox. Classify inbound, decide reply channel, case-match against a task board, draft-not-send. Works with AgentMail or similar. |
 | `email-triage` | Strict policy for triaging a user's personal Gmail. Zero-deletion, filing, voucher preservation, case matching. Companion to email-policy. |
 | `formal-contract-drafting` | Draft clean, fully populated formal agreements from scratch. Tenancy agreements, side letters, contracts. Markdown to PDF/HTML/RTF pipeline. No templates needed. |
