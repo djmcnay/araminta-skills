@@ -22,8 +22,8 @@ Use this skill to make a reviewable backup of local, genuinely agent-authored He
 ```
 hermes-sync-agent-skills/
   SKILL.md
-  config.example.json                 # portable path placeholders
-  agent-authored-manifest.example.json
+  templates/config.example.json       # portable path placeholders
+  templates/agent-authored-manifest.example.json
   scripts/sync_agent_authored_skills.py
   tests/test_sync_agent_authored_skills.py
 ```
